@@ -11,21 +11,36 @@ const colors = [
 ]
 
 var foodTitle = [
-    '蘋果', '西瓜', '永和米漿'
+    '炒糖', '北蕉(香蕉)', '金桔麻糬餅'
 ];
 var foodDescript = [
-    '又大又紅的蘋果，看起來好像很好吃的樣子',
-    '一顆圓圓的西瓜，就這樣',
-    '絕對不是業配，目前絕對不是'
+    '產出組織：8DTea \n\
+    產出日期：2021-01-12 15:47:43\n\
+    有效日期：2021-04-12\n\
+    產出數量：20000毫升 (1鍋)\n\
+    剩餘數量：17000毫升 (0.85鍋)\n\
+    相關連結：https://fc.efoodex.net/portal.php?oid=148655&m=1',
+    '產出組織：8DTea\n\
+    產出日期：2021-01-28 15:11:17\n\
+    有效日期：2021-04-25\n\
+    產出數量：18公斤 (1箱)\n\
+    剩餘數量：18公斤 (1箱)\n\
+    相關連結：https://fc.efoodex.net/portal.php?oid=152263&m=1',
+    '產出組織：宗泰食品\n\
+    產出日期：2021-01-28 13:37:21\n\
+    有效日期：2021-03-09\n\
+    產出數量：272台斤 (272批)\n\
+    剩餘數量：272台斤 (272批)\n\
+    相關連結：https://fc.efoodex.net/portal.php?oid=152213&m=1'
 ];
 var foodValue = [
-    20, 30, 76
+    20, 30, 35
 ];
 
 var foodSrc = [
-    '../img/apple.png',
-    '../img/watermelon.png',
-    '../img/ricedrink.png'
+    '../img/1667.jpg',
+    '../img/8841.jpg',
+    '../img/no.png'
 ]
 
 var foodX = [10, 20, 50];
@@ -67,6 +82,11 @@ $(document).ready(async function () {
         contract.methods.users(acc).call().then(users => {
             money = users.money;
             $("#gold").text(money);
+            if( users.UserType == 2 ){
+                $('#mileage').text(users.mileage);
+            }else{
+                $('#mileage').text("你不是外送員!");
+            }
         })
 
         role = res[0].value;
@@ -201,7 +221,6 @@ function updateList(search) {
             y = user.where.y;
             document.getElementById("nowLocation").innerHTML = `<h4 class="col md-2" id="nowLocation">現在位置：(${x},${y})</h4>`
         })
-
         update_deliver();
         setInterval(
             update_deliver
@@ -217,14 +236,12 @@ function updateList(search) {
                     contract.methods.FoodList(index).call().then((list) => {
                         var nowx = list.From.x;
                         var nowy = list.From.y;
+                        var tox = list.To.x;
+                        var toy = list.To.y;
                         $("#deliverOrderLocate", template).text(`(${nowx},${nowy})`);
                         $("#deliverOrderName", template).text(list.name);
                         $("#deliverOrderMoney", template).text(list.money);
-                        if (list.finish != true && list.get == true) {
-                            $("#deliverOrderStatus", template).html(`
-                                <button class="translate btn btn-outline-secondary" type="button" id="${list.cnt_num}">轉單</button>
-                                `)
-                        }
+                        $("#deliverOrderStatus", template).html(`(${tox},${toy})`)
                         if (sendArray[sendArray.length - 1].toLowerCase() == acc.toLowerCase() && !list.finish) {
                             container.append(template);
                         }
@@ -434,9 +451,9 @@ $(document).on("click", ({ target }) => {
     } else if ($(target).hasClass("translate")) {
         var id = target.id;
         Swal.fire({
-            title: '輸入下一個外送員之名稱',
+            title: '輸入上一個外送員之名稱',
             input: 'text',
-            inputPlaceholder: '下一個外送員',
+            inputPlaceholder: '上一個外送員',
             showCancelButton: true,
             inputValidator: (value) => {
                 if (!value) {
@@ -445,10 +462,22 @@ $(document).on("click", ({ target }) => {
             }
         }).then((nextAddress) => {
             // console.log(nextAddress);
-            contract.methods.users(acc).call().then((user) => {
-                var nowx = user.where.x;
-                var nowy = user.where.y;
-                contract.methods.transorder(nextAddress.value, id, nowx, nowy).send({ from: acc });
+            Swal.fire({
+                title: '輸入轉單編號',
+                input: 'text',
+                inputPlaceholder: '編號',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return '你需要輸入值'
+                    }
+                }
+            }).then((id) => {
+                contract.methods.users(acc).call().then((user) => {
+                    var nowx = user.where.x;
+                    var nowy = user.where.y;
+                    contract.methods.transorder(nextAddress.value, id.value, nowx, nowy).send({ from: acc });
+                })
             })
         })
     } else if ($(target).hasClass("updateLocation")) {
