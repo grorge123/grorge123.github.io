@@ -78,8 +78,10 @@ $(document).ready(async function () {
         getRated(),
         getCategories()
     ]);
+	console.log('start get')
     $.get('/food.json', async(js)=>{
-        for(let i = 0 ; i < js.length ; i++){
+        console.log('getting')
+		for(let i = 0 ; i < js.length ; i++){
             foodTitle.push(js[i]["foodTitle"])
             foodDescript.push(js[i]["foodDescript"])
             foodValue.push(js[i]["foodValue"])
@@ -87,8 +89,11 @@ $(document).ready(async function () {
             foodX.push(js[i]["foodX"])
             foodY.push(js[i]["foodY"])
         }
+		console.log('updating')
         updateList();
+		console.log('finish')
     })
+	console.log('end get')
     if (await getAccount()) {
         contract.methods.users(acc).call().then(users => {
             money = users.money;
