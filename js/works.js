@@ -89,28 +89,44 @@ $(document).ready(async function () {
                 $('#mileage').text("你不是外送員!");
             }
         })
-
+		
         role = res[0].value;
-        
+        console.log('start get')
+		$.get('/food.json', async(js)=>{
+			console.log('getting')
+			for(let i = 0 ; i < js.length ; i++){
+				foodTitle.push(js[i]["foodTitle"])
+				foodDescript.push(js[i]["foodDescript"])
+				foodValue.push(js[i]["foodValue"])
+				foodSrc.push(js[i]["foodSrc"])
+				foodX.push(js[i]["foodX"])
+				foodY.push(js[i]["foodY"])
+			}
+			console.log('updating')
+			updateList();
+			console.log('finish')
+		})
+		console.log('end get')
     } else {
         role = "guest";
-    }
-	console.log('start get')
-	$.get('/food.json', async(js)=>{
-        console.log('getting')
-		for(let i = 0 ; i < js.length ; i++){
-            foodTitle.push(js[i]["foodTitle"])
-            foodDescript.push(js[i]["foodDescript"])
-            foodValue.push(js[i]["foodValue"])
-            foodSrc.push(js[i]["foodSrc"])
-            foodX.push(js[i]["foodX"])
-            foodY.push(js[i]["foodY"])
-        }
-		console.log('updating')
-        updateList();
-		console.log('finish')
-    })
-	console.log('end get')
+		console.log('start get')
+		$.get('/food.json', async(js)=>{
+			console.log('getting')
+			for(let i = 0 ; i < js.length ; i++){
+				foodTitle.push(js[i]["foodTitle"])
+				foodDescript.push(js[i]["foodDescript"])
+				foodValue.push(js[i]["foodValue"])
+				foodSrc.push(js[i]["foodSrc"])
+				foodX.push(js[i]["foodX"])
+				foodY.push(js[i]["foodY"])
+			}
+			console.log('updating')
+			updateList();
+			console.log('finish')
+		})
+		console.log('end get')
+	}
+	
 })
 let deliverhasResult = false;
 function update_deliver() {
