@@ -163,7 +163,7 @@ function updateList(search) {
     const my = window.location.hash.split("#")[1] == "my";
     const container = $("#worksContainer");
     container.find(".work").remove();
-
+    // $("#delivers-list").remove();
     let hasResult = false;
     if (role == "customer") {
         for (var i = 0; i < foodSrc.length; i++) {
