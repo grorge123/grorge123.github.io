@@ -78,7 +78,7 @@ $(document).ready(async function () {
         getRated(),
         getCategories()
     ]);
-    $.get('/food.json', (js)=>{
+    $.get('/food.json', async(js)=>{
         for(let i = 0 ; i < js.length ; i++){
             foodTitle.push(js[i]["foodTitle"])
             foodDescript.push(js[i]["foodDescript"])
@@ -86,8 +86,9 @@ $(document).ready(async function () {
             foodSrc.push(js[i]["foodSrc"])
             foodX.push(js[i]["foodX"])
             foodY.push(js[i]["foodY"])
-            
         }
+        updateList();
+        
     })
     if (await getAccount()) {
         contract.methods.users(acc).call().then(users => {
