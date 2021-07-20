@@ -30,8 +30,10 @@ async function requestAccount() {
 // Pop alert until the network ID is correct
 async function checkNetwork() {
     if (window.ethereum.chainId != 4) {
-        console.log("Please connect to the Rinkeby Testnet!");
-    }
+		console.log("Please connect to the Rinkeby Testnet!");
+		return false;
+	}
+	return true;
 }
 
 
@@ -91,21 +93,22 @@ function get_info() {
 }
 
 $(document).ready(async function () {
-	await requestAccount();
+	let init = true;
+	if (!await requestAccount()) init = false;
 	w3 = new Web3(window.ethereum);
 
-    if (await getAccount()){
+    if (!await getAccount()) init = false;
         // MetaMask is connected
-        await checkNetwork();
-        w3 = new Web3(window.ethereum);
-        w3.eth.defaultAccount = acc;
-        logged_in = true;
+	if (await checkNetwork()) init = false;
+	if(!init)return;
+	w3 = new Web3(window.ethereum);
+	w3.eth.defaultAccount = acc;
+	logged_in = true;
 
-        w3.eth.getBalance(acc, w3.eth.defaultBlock, (e, bal) => {
-			$("#acc").text(`${w3.utils.toChecksumAddress(acc)}`);
-			address =  w3.utils.toChecksumAddress(acc) ;
-        })
-    } 
+	w3.eth.getBalance(acc, w3.eth.defaultBlock, (e, bal) => {
+		$("#acc").text(`${w3.utils.toChecksumAddress(acc)}`);
+		address =  w3.utils.toChecksumAddress(acc) ;
+	})
 	contract = new w3.eth.Contract(await $.get(contractABI), contractAddress);
 	get_info();
 	var intervalID = setInterval(get_info, 1000);
