@@ -99,11 +99,10 @@ $(document).ready(async function () {
 
     if (!await getAccount()) init = false;
         // MetaMask is connected
-	if (await checkNetwork()) init = false;
+	if (!await checkNetwork()) init = false;
 	if (init) {
 		w3 = new Web3(window.ethereum);
 		w3.eth.defaultAccount = acc;
-		logged_in = true;
 	
 		w3.eth.getBalance(acc, w3.eth.defaultBlock, (e, bal) => {
 			$("#acc").text(`${w3.utils.toChecksumAddress(acc)}`);
