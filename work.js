@@ -100,18 +100,19 @@ $(document).ready(async function () {
     if (!await getAccount()) init = false;
         // MetaMask is connected
 	if (await checkNetwork()) init = false;
-	if(!init)return;
-	w3 = new Web3(window.ethereum);
-	w3.eth.defaultAccount = acc;
-	logged_in = true;
-
-	w3.eth.getBalance(acc, w3.eth.defaultBlock, (e, bal) => {
-		$("#acc").text(`${w3.utils.toChecksumAddress(acc)}`);
-		address =  w3.utils.toChecksumAddress(acc) ;
-	})
-	contract = new w3.eth.Contract(await $.get(contractABI), contractAddress);
-	get_info();
-	var intervalID = setInterval(get_info, 1000);
+	if (init) {
+		w3 = new Web3(window.ethereum);
+		w3.eth.defaultAccount = acc;
+		logged_in = true;
+	
+		w3.eth.getBalance(acc, w3.eth.defaultBlock, (e, bal) => {
+			$("#acc").text(`${w3.utils.toChecksumAddress(acc)}`);
+			address =  w3.utils.toChecksumAddress(acc) ;
+		})
+		contract = new w3.eth.Contract(await $.get(contractABI), contractAddress);
+		get_info();
+		var intervalID = setInterval(get_info, 1000);
+	}
 })
 
 $("#reg").on("click", async function () {
