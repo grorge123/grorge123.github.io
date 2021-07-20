@@ -30,7 +30,7 @@ async function requestAccount() {
 // Pop alert until the network ID is correct
 async function checkNetwork() {
     if (window.ethereum.chainId != 4) {
-        console.log("Please connect to the Ropsten Testnet!");
+        console.log("Please connect to the Rinkeby Testnet!");
     }
 }
 
