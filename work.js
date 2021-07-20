@@ -1,4 +1,4 @@
-contractAddress = "0x7EB09589935065Bc5E654e573F5e3451967eE851";
+contractAddress = "0xa1BCe629767D23cb719990FB8aDF54a2B4Da41d1";
 contractABI = "./abi.json";
 
 async function requestAccount() {
@@ -29,7 +29,7 @@ async function requestAccount() {
 
 // Pop alert until the network ID is correct
 async function checkNetwork() {
-    if (window.ethereum.chainId != 3) {
+    if (window.ethereum.chainId != 4) {
         console.log("Please connect to the Ropsten Testnet!");
     }
 }
