@@ -1,4 +1,4 @@
-contractAddress = "0xa1BCe629767D23cb719990FB8aDF54a2B4Da41d1";
+contractAddress = "0x4CeF8fA0C1896dF8c3507e0128dF45e29bD35d6C";
 contractABI = "./abi.json";
 
 async function requestAccount() {
