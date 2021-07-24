@@ -1,32 +1,6 @@
 contractAddress = "0x4CeF8fA0C1896dF8c3507e0128dF45e29bD35d6C";
 contractABI = "./abi.json";
 
-async function requestAccount() {
-    if (!window.ethereum) {
-		console.log("You are not install Metamask");
-    }
-
-    let err = false;
-    await window.ethereum.request({ method: "eth_requestAccounts"}) // ethereum.enable() is deprecated
-    .then((accounts) => {
-        acc = accounts[0];
-    })
-    .catch((e) => {
-        if (e.code === 4001) {
-            console.log('You rejected the connection!')
-        } else {
-            console.error(e);
-        }
-        err = true;
-    })
-    if (err) return false;
-    
-    checkNetwork();
-
-    return true;
-}
-
-
 // Pop alert until the network ID is correct
 async function checkNetwork() {
     if (window.ethereum.chainId != 4) {
@@ -94,7 +68,11 @@ function get_info() {
 
 $(document).ready(async function () {
 	let init = true;
-	if (!await requestAccount()) init = false;
+	
+	if (!window.ethereum) {
+		console.log("You are not install Metamask");
+	}
+	
 	w3 = new Web3(window.ethereum);
 
     if (!await getAccount()) init = false;
