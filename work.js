@@ -21,7 +21,7 @@ async function getAccount() {
     }
 
     let status = false;
-    await window.ethereum.request({ method: 'eth_accounts' })
+    await window.ethereum.request({ method: 'eth_requestAccounts' })
     .then((accounts) => {
         if (accounts.length) {
             acc = accounts[0];
